@@ -17,3 +17,11 @@ generate:
 
 clean:
 	rm -rf $$(pwd)/goclient
+
+run-test-image-locally:
+	docker rm -f test-grafana
+	docker run --name test-grafana -d -p 3000:3000 grafana/grafana:latest
+
+test: clean-test run-test-image-locally
+	sleep 3
+	go test -cover -race -vet all -mod readonly ./... 	
